@@ -63,6 +63,7 @@ Latest Version:
 
 🆕 **New**
 - `2026.8.1` - **NOWEB** - `WAHA_NOWEB_WA_VERSION=auto-web|auto-baileys` - fetch the latest WhatsApp Web version on start - [**NOWEB**]({{< relref "/docs/engines/noweb#configuration" >}})
+- `2026.8.1` - **GOWS** - `WAHA_GOWS_KEEPALIVE_INTERVAL_MIN|MAX` - keepalive ping interval for proxies reaping idle tunnels - [**GOWS**]({{< relref "/docs/engines/gows#keepalive" >}}) - closes devlikeapro/gows-plus#3
 
 {{< /autolink-prs >}}
 {{< /autolink-issues >}}

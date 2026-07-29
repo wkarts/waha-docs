@@ -870,6 +870,7 @@
       "join-group",
       "join-groups-api",
       "json-logs",
+      "keepalive",
       "keys-api",
       "label-color",
       "labelchatadded",
