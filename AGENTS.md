@@ -46,6 +46,17 @@ POST /api/...
 - **Line length:** keep each changelog entry short — aim for **120 characters max** (longer is fine when needed, but trim the summary first). The trailing `relref` doc link and `fix #NNNN` reference don't count against the target.
 - Keep entries short - about 120-140 characters of visible text max; one line per change, no explanations or side notes.
 - **Multi-fix commits:** when a single commit message lists several `Fix #NNNN` lines (e.g. a `[core] Up GOWS` bump that embeds multiple fixes), **split each fix into its own separate changelog entry** — do not collapse them into one line.
+- **Version sections:** each `### YYYY.M` version is **wrapped** in paired autolink shortcodes — opened right after the header and **closed at the end of the section** (before the next `###`). When adding a new version section, always add both the opening and closing tags:
+  ```
+  ### YYYY.M
+  {{< autolink-issues repo=devlikeapro/waha >}}
+  {{< autolink-prs repo=devlikeapro/waha >}}
+
+  ...all the version's sections and entries...
+
+  {{< /autolink-prs >}}
+  {{< /autolink-issues >}}
+  ```
 
 ## 🧩 Image Tools
 

@@ -6,15 +6,20 @@ You can use the following environment variables to configure the global behavior
 
 **NOWEB** ships with a built-in WhatsApp Web version, and you can override it without waiting for a new release:
 
-- `WAHA_NOWEB_WA_VERSION=2.3000.1234567890` - set the WhatsApp Web version to use.
-  - WAHA compares it with the built-in version **once on start** and uses the **higher** one.
+- `WAHA_NOWEB_WA_VERSION` - set the WhatsApp Web version to use:
+  - `WAHA_NOWEB_WA_VERSION=2.3000.1234567890` - the exact version.
+  - `WAHA_NOWEB_WA_VERSION=auto-web` - fetch the latest version from **WhatsApp Web** on start (recommended).
+  - `WAHA_NOWEB_WA_VERSION=auto-baileys` - fetch the version from the latest **Baileys** sources on GitHub on start.
+  - WAHA compares the version (set or fetched) with the built-in one **once on start** and uses the **higher** one.
   - If the built-in version is higher - the variable is ignored (you'll see the resolved version in logs).
 - `WAHA_NOWEB_WA_VERSION_FORCE=True` - always use the version from `WAHA_NOWEB_WA_VERSION`, even if the built-in version is higher. By default, it's `False`.
 
 ```bash
 WHATSAPP_DEFAULT_ENGINE=NOWEB
 
-# Used only if it's higher than the built-in version
+# Fetch the latest WhatsApp Web version on start
+WAHA_NOWEB_WA_VERSION=auto-web
+# OR set the exact version - used only if it's higher than the built-in one
 WAHA_NOWEB_WA_VERSION=2.3000.1234567890
 
 # Set to True to use WAHA_NOWEB_WA_VERSION even if the built-in version is higher
@@ -25,11 +30,14 @@ WAHA_NOWEB_WA_VERSION_FORCE=False
 
 <div style="width: 100%">
 
-You can resolve the **latest** WhatsApp Web version right before WAHA starts and pass it via `WAHA_NOWEB_WA_VERSION` -
-no need to wait for a new WAHA release.
+Set `WAHA_NOWEB_WA_VERSION=auto-web` (available since `2026.8.1`) and WAHA fetches the **latest** WhatsApp Web version
+on start - no need to wait for a new WAHA release.
 
 It's safe by design: WAHA uses the fetched version only if it's **higher** than the built-in one,
 so a failed or stale fetch simply falls back to the built-in version.
+
+If you run an older WAHA version (or want to control the version outside of WAHA) -
+you can resolve it right before WAHA starts and pass it via `WAHA_NOWEB_WA_VERSION`:
 
 {{< details "Auto-update WhatsApp Web Version - Setup" >}}
 

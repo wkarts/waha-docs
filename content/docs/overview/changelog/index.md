@@ -57,6 +57,16 @@ Latest Version:
 
 👉🏻 Check the [**🔧 Install & Update**]({{< relref "/docs/how-to/install" >}}) page to learn how to update WAHA.
 
+### 2026.8
+{{< autolink-issues repo=devlikeapro/waha >}}
+{{< autolink-prs repo=devlikeapro/waha >}}
+
+🆕 **New**
+- `2026.8.1` - **NOWEB** - `WAHA_NOWEB_WA_VERSION=auto-web|auto-baileys` - fetch the latest WhatsApp Web version on start - [**NOWEB**]({{< relref "/docs/engines/noweb#configuration" >}})
+
+{{< /autolink-prs >}}
+{{< /autolink-issues >}}
+
 ### 2026.7
 {{< autolink-issues repo=devlikeapro/waha >}}
 {{< autolink-prs repo=devlikeapro/waha >}}
