@@ -62,6 +62,7 @@ Latest Version:
 {{< autolink-prs repo=devlikeapro/waha >}}
 
 🆕 **New**
+- `2026.7.2` - **NOWEB** - `WAHA_NOWEB_WA_VERSION` / `WAHA_NOWEB_WA_VERSION_FORCE` env variables to override WhatsApp Web version - [**NOWEB**]({{< relref "/docs/engines/noweb#configuration" >}}) - closes #2193
 - `2026.7.2` - Groups - `settings/security/member-add-mode` API - who can add new members - [**👥 Groups**]({{< relref "/docs/how-to/groups#security---who-can-add-members" >}}) - fix #2165, closes #2172
 - `2026.7.2` - **GOWS** - `WAHA_GOWS_LINK_PREVIEW_TIMEOUT` env variable (default `10s`) for link preview generation - [**GOWS**]({{< relref "/docs/engines/gows#link-preview" >}})
 - `2026.7.1` - **API** - scoped session keys — narrow media / control keys so you never share the real API key - [**🔒 Keys API**]({{< relref "/docs/how-to/security#scoped-session-keys-media--control" >}}) - fix #2146
@@ -69,7 +70,15 @@ Latest Version:
 - `2026.7.1` - **WEBJS** - expose the current account LID in session "me" info (`me.lid`)
 - `2026.7.1` - **GOWS** - Passkey (WebAuthn) session pairing via `session.status` and `/api/{session}/auth/passkey` API - [**How to Handle Passkey**]({{< relref "/blog/waha-passkey" >}})
 
+🧩 **ChatWoot**
+- `2026.7.2` - safe read and show typing while sending messages - fix #2173
+
 🛠️ **Fixes**
+
+- `2026.7.2` - Restart stopped sessions no longer aborts when one stuck session fails to restart - closes #2169
+- `2026.7.2` - **NOWEB** - fix WhatsApp Web version - fix #2191
+- `2026.7.2` - **NOWEB** - empty `message.edited` event body - fix #2168
+- `2026.7.2` - **GOWS** - `unknown field "faviconMMSMetadata"` error - fix #2172
 - `2026.7.2` - **WEBJS**, **WPP** - group info `membersCanAddNewMember` was read from the wrong setting
 - `2026.7.2` - **GOWS**, **NOWEB**, **WEBJS** - `server returned error 463` when messaging new contacts - [**Reachout Timelock**]({{< relref "/docs/how-to/sessions#reachout-timelock" >}}) - fix #2166
 - `2026.7.2` - **WEBJS** - Link previews in Channels: blurred thumbnail on Android, white image on iPhone - fix #2163
@@ -85,10 +94,13 @@ Latest Version:
 - `2026.7.1` - **MCP** - do not expose the real API key in media and auth tool output - fix #2146
 
 📊 **Dashboard**
+- `2026.7.2` - session info in session details, copy button in Event Monitor
 - `2026.7.1` - Passkey UI - extension-assisted pairing with manual DevTools fallback
 - `2026.7.1` - fix image emoji
 
 ⚙️ **Updates**
+- `2026.7.2` - **NOWEB** - up engine
+- `2026.7.2` - **WEBJS** - up Chrome to `140.0.7339.207`
 - `2026.7.1` - **WEBJS** - up engine
 - `2026.7.1` - **GOWS** - up engine
 - `2026.7.1` - **NOWEB** - up engine

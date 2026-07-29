@@ -26,6 +26,9 @@ docker run -v `pwd`/.sessions:/app/.sessions -e "WHATSAPP_DEFAULT_ENGINE=NOWEB" 
 ```
 
 ## Configuration
+{{< include file="content/docs/engines/noweb/-env-config.md" >}}
+
+## Session Config
 - `markOnline: true` - send `online` **presence** when session starts (default `true`).
   - Required if you want to get notifications in your phone
   - Read more about [**✅ Presence**]({{< relref "/docs/how-to/presence" >}})

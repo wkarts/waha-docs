@@ -116,6 +116,9 @@ Read more about [**🏭 Engines**]({{< relref "/docs/how-to/engines" >}})
 ### WEBJS
 {{< include file="content/docs/engines/webjs/-env-config.md" >}}
 
+### NOWEB
+{{< include file="content/docs/engines/noweb/-env-config.md" >}}
+
 ### GOWS
 {{< include file="content/docs/engines/gows/-env-config.md" >}}
 
