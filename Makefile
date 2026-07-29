@@ -4,9 +4,9 @@ update-swagger:
 
 changelog-from-plus:
 	@cd ../whatsapp-http-api && \
-	base=$$(git merge-base plus HEAD); \
+	base=$$(git merge-base core HEAD); \
 	if [ -z "$$base" ]; then \
-		echo "❌ Could not find common base with 'plus'"; \
+		echo "❌ Could not find common base with 'core'"; \
 	else \
 		echo "📦 Repository: $$(basename $$PWD)"; \
 		echo "🧩 Common base with plus: $$base"; \
