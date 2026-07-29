@@ -73,6 +73,16 @@ Do **NOT** restart, logout or re-pair the session - the restriction lifts automa
 Pause outreach to new contacts and read more in
 [**🖥️ Sessions → Reachout Timelock**]({{< relref "/docs/how-to/sessions#reachout-timelock" >}}).
 
+## Message Capping
+
+WhatsApp also enforces a **per-cycle quota** on how many **new contacts** an account may message -
+once `CAPPED`, sending messages to new contacts fails with `server returned error 475` until the cycle resets,
+while the session stays connected and `WORKING`.
+
+Do **NOT** restart, logout or re-pair the session - it does not reset the quota.
+Watch the warnings (`FIRST_WARNING`, `SECOND_WARNING`), slow down outreach to new contacts, and read more in
+[**🖥️ Sessions → Message Capping**]({{< relref "/docs/how-to/sessions#message-capping" >}}).
+
 ## How to Avoid Getting Banned
 
 WhatsApp knows that it's uncommon for someone to send so many messages or bulk messages to people they've never talked to before, so it is considered spam/marketing junk pretty quickly. Here are some tips before sending a message to WhatsApp:

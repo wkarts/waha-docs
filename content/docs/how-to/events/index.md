@@ -494,6 +494,40 @@ Available in **GOWS**, **NOWEB** and **WEBJS** engines, see
 {{< include file="content/docs/how-to/sessions/reachout-timelock-callout.md" >}}
 {{< /callout >}}
 
+The `data` field is also used for **Message Capping** - WhatsApp's per-cycle quota on messaging **new** contacts
+(the cause of `server returned error 475` on send once `CAPPED`).
+The session stays `WORKING` - do **NOT** restart or logout it, the quota resets automatically at `cycleEnd`.
+See [**Message Capping ->**]({{< relref "/docs/how-to/sessions#message-capping" >}}):
+
+```jsonc { title="session.status - WORKING - Message Capping" }
+{
+    "event": "session.status",
+    "session": "default",
+    "payload": {
+        "status": "WORKING",
+        "statuses": [ /* ... */ ],
+        // WhatsApp caps how many NEW contacts the account may message per cycle
+        // WAHA re-issues WORKING whenever the capping state changes
+        "data": {
+            "messageCapping": {
+                "cappingStatus": "FIRST_WARNING",
+                "totalQuota": 1000,
+                "usedQuota": 640,
+                "cycleStart": 1782874800,
+                "cycleEnd": 1785553199,
+                "mvStatus": "NOT_ELIGIBLE",
+                "oteStatus": "NOT_ELIGIBLE"
+            }
+        },
+    },
+    "engine": "GOWS",
+}
+```
+
+{{< callout context="caution" title="Message Capping" icon="outline/alert-triangle" >}}
+{{< include file="content/docs/how-to/sessions/message-capping-callout.md" >}}
+{{< /callout >}}
+
 ### message
 
 Incoming message (text/audio/files)

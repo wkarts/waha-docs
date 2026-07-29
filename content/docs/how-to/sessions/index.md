@@ -55,7 +55,7 @@ Here's the list of possible `session.status` values:
     - Most pairings never reach this status - WhatsApp confirms them on its own.
 - `WORKING` - session is working and ready to use
     - The `WORKING` status event may carry extra info in the `data` field,
-      see [**Reachout Timelock ->**](#reachout-timelock).
+      see [**Reachout Timelock ->**](#reachout-timelock) and [**Message Capping ->**](#message-capping).
 - `FAILED` - session is failed due to some error. It's likely either authorization is required again or device has been
   disconnected from that account. 
 
@@ -122,6 +122,76 @@ GET /api/sessions/{session}/me
 
 {{< callout context="caution" title="Reachout Timelock" icon="outline/alert-triangle" >}}
 {{< include file="content/docs/how-to/sessions/reachout-timelock-callout.md" >}}
+{{< /callout >}}
+
+### Message Capping
+
+WhatsApp also enforces a **per-cycle quota** on how many **new contacts** ("cold" contacts) an account may message -
+it's called **Message Capping**, the volume counterpart of the [**Reachout Timelock**](#reachout-timelock).
+Once the account is `CAPPED`, sending messages to new contacts fails with `server returned error 475`
+until the cycle resets.
+
+The session stays **CONNECTED** and the status stays `WORKING` - no logout or disconnect happens,
+so do **NOT** restart or re-pair the session - WhatsApp resets the quota automatically at `cycleEnd`.
+
+When the capping info arrives (or changes), **WAHA** re-issues a `WORKING`
+[`session.status`](#sessionstatus) event with the info in the `data` field:
+
+```jsonc { title="session.status" }
+{
+  "event": "session.status",
+  "session": "default",
+  "payload": {
+    "name": "default",
+    "status": "WORKING",
+    "data": {
+      "messageCapping": {
+        "cappingStatus": "FIRST_WARNING",
+        "totalQuota": 1000,
+        "usedQuota": 640,
+        "cycleStart": 1782874800,
+        "cycleEnd": 1785553199,
+        "mvStatus": "NOT_ELIGIBLE",
+        "oteStatus": "NOT_ELIGIBLE"
+      }
+    }
+  }
+}
+```
+
+- `cappingStatus` - how close the account is to the quota:
+  `NONE`, `FIRST_WARNING`, `SECOND_WARNING`, `CAPPED` (new chats are blocked).
+  WhatsApp may introduce new values, so treat it as an open set.
+- `totalQuota` - new-chat messages allowed in the current cycle, `-1` when the account has no cap.
+- `usedQuota` - new-chat messages already used in the current cycle.
+- `cycleStart`, `cycleEnd` - unix timestamps (in **seconds**) of the current cycle, may be `null`.
+- `mvStatus`, `oteStatus` - raw WhatsApp values (Meta Verified and one-time engagement statuses), informational only.
+
+You can also read the current state at any time from [**Get me**](#get-me) - the `messageCapping` field
+(the same `me` object is available in `GET /api/sessions` and `GET /api/sessions/{session}`).
+On session start **WAHA** fetches the current state from WhatsApp, so the field is populated even after restarts.
+
+To get a **fresh** value right from WhatsApp on demand - fetch it
+(it also updates `me.messageCapping` and re-issues the `session.status` event if the state changed):
+
+```http request
+GET /api/sessions/{session}/capping
+```
+
+```jsonc { title="Response" }
+{
+  "cappingStatus": "FIRST_WARNING",
+  "totalQuota": 1000,
+  "usedQuota": 640,
+  "cycleStart": 1782874800,
+  "cycleEnd": 1785553199,
+  "mvStatus": "NOT_ELIGIBLE",
+  "oteStatus": "NOT_ELIGIBLE"
+}
+```
+
+{{< callout context="caution" title="Message Capping" icon="outline/alert-triangle" >}}
+{{< include file="content/docs/how-to/sessions/message-capping-callout.md" >}}
 {{< /callout >}}
 
 
@@ -872,12 +942,17 @@ GET /api/sessions/{session}/me
   "pushName": "string",
   // "null" if no enforcement has been seen
   // see "Reachout Timelock" section above
-  "reachoutTimelock": null
+  "reachoutTimelock": null,
+  // "null" if no capping info has been seen
+  // see "Message Capping" section above
+  "messageCapping": null
 }
 ```
 
-- `reachoutTimelock` - WhatsApp's restriction on messaging new contacts (**GOWS**, **NOWEB**, **WEBJS**),
+- `reachoutTimelock` - WhatsApp's restriction on messaging new contacts,
   see [**Reachout Timelock ->**](#reachout-timelock).
+- `messageCapping` - WhatsApp's per-cycle quota on messaging new contacts,
+  see [**Message Capping ->**](#message-capping).
 
 **Stopped** or **not authenticated** session returns `null`:
 

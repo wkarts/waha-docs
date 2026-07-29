@@ -910,6 +910,7 @@
       "media-storage",
       "mention-contact",
       "message",
+      "message-capping",
       "messageack",
       "messageackgroup",
       "messageany",
