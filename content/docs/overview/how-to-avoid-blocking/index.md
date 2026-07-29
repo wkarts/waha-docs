@@ -5,6 +5,9 @@ date: 2020-11-12T13:26:54+01:00
 lastmod: 2020-11-12T13:26:54+01:00
 draft: false
 images: ["cover.png"]
+slug: how-to-avoid-blocking
+aliases:
+  - "/docs/overview/️-how-to-avoid-blocking/"
 
 menu:
   docs:
