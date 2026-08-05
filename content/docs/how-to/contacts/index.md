@@ -143,7 +143,8 @@ It returns `numberExists` field with `true` or `false` value and `chatId` field 
 ```jsonc { title="Response" }
 {
   "numberExists": true,
-  "chatId": "123123123@c.us"
+  "chatId": "23423462304912@lid",
+  "pn": "123123123@c.us" // optional, can be null
 }
 ```
 **Note for 🇧🇷 Brazilian Phone Numbers**

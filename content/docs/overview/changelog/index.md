@@ -62,9 +62,17 @@ Latest Version:
 {{< autolink-prs repo=devlikeapro/waha >}}
 
 🆕 **New**
-- `2026.8.2` - [**Message Capping**]({{< relref "/docs/how-to/sessions#message-capping" >}}) - `GET /api/sessions/{session}/capping`, `me.messageCapping` and `session.status` events - closes #2186
+- `2026.8.1` - [**Message Capping**]({{< relref "/docs/how-to/sessions#message-capping" >}}) - `GET /api/sessions/{session}/capping`, `me.messageCapping` and `session.status` events - closes #2186
 - `2026.8.1` - **NOWEB** - `WAHA_NOWEB_WA_VERSION=auto-web|auto-baileys` - fetch the latest WhatsApp Web version on start - [**NOWEB**]({{< relref "/docs/engines/noweb#configuration" >}})
 - `2026.8.1` - **GOWS** - `WAHA_GOWS_KEEPALIVE_INTERVAL_MIN|MAX` - keepalive ping interval for proxies reaping idle tunnels - [**GOWS**]({{< relref "/docs/engines/gows#keepalive" >}}) - closes devlikeapro/gows-plus#3
+
+🧩 **ChatWoot**
+- `2026.8.1` - populate the WhatsApp JID attribute for `@lid` contacts from the message payload - fix #2208
+
+🛠️ **Fixes**
+- `2026.8.1` - **GOWS** - `check-exists` returns the phone number in the new `pn` field (`chatId` can be a `@lid`) - fix #2208
+- `2026.8.1` - **GOWS** - fill the phone number (`_data.Info.SenderAlt`) from the LID store in message payloads - fix #2208
+- `2026.8.1` - **GOWS** - Lids API resolves unknown `@lid` → phone number via a server query - fix #2208
 
 {{< /autolink-prs >}}
 {{< /autolink-issues >}}
