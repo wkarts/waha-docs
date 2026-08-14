@@ -64,6 +64,7 @@ Latest Version:
 🆕 **New**
 - `2026.8.1` - **GOWS** - `storage.contacts` and `storage.messageSecrets` session config flags to disable contact and message secret storage - [**GOWS**]({{< relref "/docs/how-to/sessions#gows" >}}) - closes #2207
 - `2026.8.1` - [**Message Capping**]({{< relref "/docs/how-to/sessions#message-capping" >}}) - `GET /api/sessions/{session}/capping`, `me.messageCapping` and `session.status` events - closes #2186
+- `2026.8.1` - [**Reachout Timelock**]({{< relref "/docs/how-to/sessions#reachout-timelock" >}}) - `GET /api/sessions/{session}/timelock` (**GOWS, NOWEB, WEBJS**) + **GOWS** refreshes `me.reachoutTimelock` on `463` send errors
 - `2026.8.1` - **NOWEB** - `WAHA_NOWEB_WA_VERSION=auto-web|auto-baileys` - fetch the latest WhatsApp Web version on start - [**NOWEB**]({{< relref "/docs/engines/noweb#configuration" >}})
 - `2026.8.1` - **GOWS** - `WAHA_GOWS_KEEPALIVE_INTERVAL_MIN|MAX` - keepalive ping interval for proxies reaping idle tunnels - [**GOWS**]({{< relref "/docs/engines/gows#keepalive" >}}) - closes devlikeapro/gows-plus#3
 

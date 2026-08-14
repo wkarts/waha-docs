@@ -72,8 +72,58 @@ so do **NOT** restart or re-pair the session - the restriction lifts automatical
 
 👉 Supported engines: **GOWS**, **NOWEB**, **WEBJS**.
 
+To get the **real, latest** state right from WhatsApp - fetch it on demand
+(it also updates `me.reachoutTimelock` and re-issues the `session.status` event if the state changed):
+
+```http request
+GET /api/sessions/{session}/timelock
+```
+
+```jsonc { title="Response" }
+{
+  "enforcementType": "RESTRICT_ALL_COMPANIONS",
+  "isActive": true,
+  "timeEnforcementEnds": 1784477333
+}
+```
+
+- `isActive` - whether the restriction is enforced right now.
+- `timeEnforcementEnds` - unix timestamp (in **seconds**) when the restriction ends, may be `null`.
+- `enforcementType` - the raw WhatsApp value (`RESTRICT_ALL_COMPANIONS`, `BIZ_QUALITY`, `WEB_COMPANION_ONLY`, `DEFAULT`).
+  It does **not** change what is blocked - informational only.
+
+You can also read the last known state at any time from [**Get me**](#get-me) - the `reachoutTimelock` field
+(the same `me` object is available in `GET /api/sessions` and `GET /api/sessions/{session}`).
+On session start **WAHA** fetches the current state from WhatsApp, so the field is populated even after restarts.
+**GOWS** also re-fetches the state when WhatsApp rejects a message with error `463`,
+so the field catches up even if WhatsApp applied the restriction without a push notification:
+
+```http request
+GET /api/sessions/{session}/me
+```
+
+```jsonc { title="Response" }
+{
+  "id": "11111111111@c.us",
+  "pushName": "string",
+  // "null" if no enforcement has been seen
+  "reachoutTimelock": {
+    "enforcementType": "RESTRICT_ALL_COMPANIONS",
+    "isActive": true,
+    "timeEnforcementEnds": 1784477333
+  }
+}
+```
+
+`me.reachoutTimelock` stays `null` until an enforcement has been seen for the account,
+while `GET /api/sessions/{session}/timelock` returns `isActive: false` right away when there is no enforcement.
+
 When the timelock info arrives (or changes, or lifts), **WAHA** re-issues a `WORKING`
-[`session.status`](#sessionstatus) event with the info in the `data` field:
+[`session.status`](#sessionstatus) event with the info in the `data` field.
+When the lock lifts (event or expiry), **WAHA** re-issues `WORKING` with `isActive: false`.
+
+⚠️ WhatsApp does **not** always push the change right away (or at all),
+so treat the event as a hint and call `GET /api/sessions/{session}/timelock` to get the real, latest value:
 
 ```jsonc { title="session.status" }
 {
@@ -93,33 +143,6 @@ When the timelock info arrives (or changes, or lifts), **WAHA** re-issues a `WOR
 }
 ```
 
-- `isActive` - whether the restriction is enforced right now.
-  When the lock lifts (event or expiry), **WAHA** re-issues `WORKING` with `isActive: false`.
-- `timeEnforcementEnds` - unix timestamp (in **seconds**) when the restriction ends, may be `null`.
-- `enforcementType` - the raw WhatsApp value (`RESTRICT_ALL_COMPANIONS`, `BIZ_QUALITY`, `WEB_COMPANION_ONLY`, `DEFAULT`).
-  It does **not** change what is blocked - informational only.
-
-You can also read the current state at any time from [**Get me**](#get-me) - the `reachoutTimelock` field
-(the same `me` object is available in `GET /api/sessions` and `GET /api/sessions/{session}`).
-On session start **WAHA** fetches the current state from WhatsApp, so the field is populated even after restarts:
-
-```http request
-GET /api/sessions/{session}/me
-```
-
-```jsonc { title="Response" }
-{
-  "id": "11111111111@c.us",
-  "pushName": "string",
-  // "null" if no enforcement has been seen
-  "reachoutTimelock": {
-    "enforcementType": "RESTRICT_ALL_COMPANIONS",
-    "isActive": true,
-    "timeEnforcementEnds": 1784477333
-  }
-}
-```
-
 {{< callout context="caution" title="Reachout Timelock" icon="outline/alert-triangle" >}}
 {{< include file="content/docs/how-to/sessions/reachout-timelock-callout.md" >}}
 {{< /callout >}}
@@ -134,8 +157,42 @@ until the cycle resets.
 The session stays **CONNECTED** and the status stays `WORKING` - no logout or disconnect happens,
 so do **NOT** restart or re-pair the session - WhatsApp resets the quota automatically at `cycleEnd`.
 
+To get the **real, latest** state right from WhatsApp - fetch it on demand
+(it also updates `me.messageCapping` and re-issues the `session.status` event if the state changed):
+
+```http request
+GET /api/sessions/{session}/capping
+```
+
+```jsonc { title="Response" }
+{
+  "cappingStatus": "FIRST_WARNING",
+  "totalQuota": 1000,
+  "usedQuota": 640,
+  "cycleStart": 1782874800,
+  "cycleEnd": 1785553199,
+  "mvStatus": "NOT_ELIGIBLE",
+  "oteStatus": "NOT_ELIGIBLE"
+}
+```
+
+- `cappingStatus` - how close the account is to the quota:
+  `NONE`, `FIRST_WARNING`, `SECOND_WARNING`, `CAPPED` (new chats are blocked).
+  WhatsApp may introduce new values, so treat it as an open set.
+- `totalQuota` - new-chat messages allowed in the current cycle, `-1` when the account has no cap.
+- `usedQuota` - new-chat messages already used in the current cycle.
+- `cycleStart`, `cycleEnd` - unix timestamps (in **seconds**) of the current cycle, may be `null`.
+- `mvStatus`, `oteStatus` - raw WhatsApp values (Meta Verified and one-time engagement statuses), informational only.
+
+You can also read the last known state at any time from [**Get me**](#get-me) - the `messageCapping` field
+(the same `me` object is available in `GET /api/sessions` and `GET /api/sessions/{session}`).
+On session start **WAHA** fetches the current state from WhatsApp, so the field is populated even after restarts.
+
 When the capping info arrives (or changes), **WAHA** re-issues a `WORKING`
-[`session.status`](#sessionstatus) event with the info in the `data` field:
+[`session.status`](#sessionstatus) event with the info in the `data` field.
+
+⚠️ WhatsApp does **not** always push the change right away (or at all),
+so treat the event as a hint and call `GET /api/sessions/{session}/capping` to get the real, latest value:
 
 ```jsonc { title="session.status" }
 {
@@ -156,37 +213,6 @@ When the capping info arrives (or changes), **WAHA** re-issues a `WORKING`
       }
     }
   }
-}
-```
-
-- `cappingStatus` - how close the account is to the quota:
-  `NONE`, `FIRST_WARNING`, `SECOND_WARNING`, `CAPPED` (new chats are blocked).
-  WhatsApp may introduce new values, so treat it as an open set.
-- `totalQuota` - new-chat messages allowed in the current cycle, `-1` when the account has no cap.
-- `usedQuota` - new-chat messages already used in the current cycle.
-- `cycleStart`, `cycleEnd` - unix timestamps (in **seconds**) of the current cycle, may be `null`.
-- `mvStatus`, `oteStatus` - raw WhatsApp values (Meta Verified and one-time engagement statuses), informational only.
-
-You can also read the current state at any time from [**Get me**](#get-me) - the `messageCapping` field
-(the same `me` object is available in `GET /api/sessions` and `GET /api/sessions/{session}`).
-On session start **WAHA** fetches the current state from WhatsApp, so the field is populated even after restarts.
-
-To get a **fresh** value right from WhatsApp on demand - fetch it
-(it also updates `me.messageCapping` and re-issues the `session.status` event if the state changed):
-
-```http request
-GET /api/sessions/{session}/capping
-```
-
-```jsonc { title="Response" }
-{
-  "cappingStatus": "FIRST_WARNING",
-  "totalQuota": 1000,
-  "usedQuota": 640,
-  "cycleStart": 1782874800,
-  "cycleEnd": 1785553199,
-  "mvStatus": "NOT_ELIGIBLE",
-  "oteStatus": "NOT_ELIGIBLE"
 }
 ```
 
