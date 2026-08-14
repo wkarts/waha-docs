@@ -64,18 +64,38 @@ Latest Version:
 🆕 **New**
 - `2026.8.1` - **GOWS** - `storage.contacts` and `storage.messageSecrets` session config flags to disable contact and message secret storage - [**GOWS**]({{< relref "/docs/how-to/sessions#gows" >}}) - closes #2207
 - `2026.8.1` - [**Message Capping**]({{< relref "/docs/how-to/sessions#message-capping" >}}) - `GET /api/sessions/{session}/capping`, `me.messageCapping` and `session.status` events - closes #2186
-- `2026.8.1` - [**Reachout Timelock**]({{< relref "/docs/how-to/sessions#reachout-timelock" >}}) - `GET /api/sessions/{session}/timelock` (**GOWS, NOWEB, WEBJS**) + **GOWS** refreshes `me.reachoutTimelock` on `463` send errors
+- `2026.8.1` - [**Reachout Timelock**]({{< relref "/docs/how-to/sessions#reachout-timelock" >}}) - `GET /api/sessions/{session}/timelock` (**GOWS, NOWEB, WEBJS**) + **GOWS** refreshes `me.reachoutTimelock` on `463` send errors - fix #2219
 - `2026.8.1` - **NOWEB** - `WAHA_NOWEB_WA_VERSION=auto-web|auto-baileys` - fetch the latest WhatsApp Web version on start - [**NOWEB**]({{< relref "/docs/engines/noweb#configuration" >}})
 - `2026.8.1` - **GOWS** - `WAHA_GOWS_KEEPALIVE_INTERVAL_MIN|MAX` - keepalive ping interval for proxies reaping idle tunnels - [**GOWS**]({{< relref "/docs/engines/gows#keepalive" >}}) - closes devlikeapro/gows-plus#3
 
 🧩 **ChatWoot**
 - `2026.8.1` - populate the WhatsApp JID attribute for `@lid` contacts from the message payload - fix #2208
+- `2026.8.1` - do not save full attachment content in the task result - fix #2201, closes #2202
 
 🛠️ **Fixes**
 - `2026.8.1` - **GOWS** - disabling all `gows.storage` flags was silently ignored and data was stored anyway - fix #2207
 - `2026.8.1` - **GOWS** - `check-exists` returns the phone number in the new `pn` field (`chatId` can be a `@lid`) - fix #2208
 - `2026.8.1` - **GOWS** - fill the phone number (`_data.Info.SenderAlt`) from the LID store in message payloads - fix #2208
 - `2026.8.1` - **GOWS** - Lids API resolves unknown `@lid` → phone number via a server query - fix #2208
+- `2026.8.1` - Groups - set the phone number in `participant.pn` for `@lid` participants when available
+- `2026.8.1` - **WEBJS** - phantom `AUTHENTICATED`/`READY` statuses after logout and message id binding race - fix #2222
+- `2026.8.1` - **WEBJS** - session stuck in `STARTING` status
+- `2026.8.1` - **WEBJS** - hide "What's new on WhatsApp Web" popup - fix #2217
+- `2026.8.1` - **WEBJS** - send button reply - fix #2183
+- `2026.8.1` - **WEBJS** - set group description - fix #2199
+- `2026.8.1` - **WEBJS** - fix adding group participants
+- `2026.8.1` - **WPP** - fix promoting group participant to admin
+- `2026.8.1` - **NOWEB** - fix leaving a group via `group.v2.leave` - fix #2206, closes #2209
+- `2026.8.1` - **NOWEB** - fix presence chat issue
+- `2026.8.1` - **S3** - set `ContentType` on uploaded media objects
+- `2026.8.1` - reliable session stop and process shutdown (**WEBJS** kills Chrome, **NOWEB** stops cleanly, **GOWS** gets SIGKILL if hanged)
+
+📊 **Dashboard**
+- `2026.8.1` - up dashboard
+
+⚙️ **Updates**
+- `2026.8.1` - **WEBJS** - up Chrome to `142.0.7444.134-1`
+- `2026.8.1` - **WPP** - up engine
 
 {{< /autolink-prs >}}
 {{< /autolink-issues >}}
